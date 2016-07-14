@@ -1,4 +1,4 @@
-DrupalSites = new Mongo.Collection 'drupalSites'
+@DrupalSites = new Mongo.Collection 'drupalSites'
 ###
 DrupalModules.attachSchema new SimpleSchema
   host: type: String
