@@ -8,7 +8,7 @@ do
   cd ${DRUPALROOT}
 
   MODULE_VERSIONS=$(drush eval "print_r(json_encode(array_map(function(\$m) { return system_get_info('module', \$m)['version']; }, array_filter(module_list(), function(\$m) { return module_exists(\$m); }))));")
-  curl -X POST -H "Content-Type:application/json" -d "{\"host\": \"`hostname -f`\", \"siteroot\": \"`pwd`\", \"modules\": ${MODULE_VERSIONS}}" https://meteordev.as.uky.edu/WebInventory/api/drupalSiteInfo
+  curl -X POST -H "Content-Type:application/json" -d "{\"host\": \"`hostname -f`\", \"siteroot\": \"`pwd`\", \"moduleVersions\": ${MODULE_VERSIONS}}" https://meteordev.as.uky.edu/WebInventory/api/drupalSiteInfo
 
 done
 
