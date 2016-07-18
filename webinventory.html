@@ -5,6 +5,22 @@
 <template name="home">
     <div>
       Known sites: {{knownSiteCount}}
+      <table>
+        <thead>
+          <th>Host</th>
+          <th>Site root</th>
+          <th>Enabled modules #</th>
+        </thead>
+        <tbody>
+          {{#each drupalSites}}
+          <tr>
+            <td>{{host}}</td>
+            <td>{{siteroot}}</td>
+            <td>{{moduleCount}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
     </div>
 </template>
 
