@@ -31,4 +31,19 @@ if Meteor.isClient
       DrupalSites.find()
     moduleCount: ->
       _.size @moduleVersions
+    knownModulePivot: ->
+      modules = {}
+      DrupalSites.find().forEach (site) ->
+        _.each site.moduleVersions, (v, m) ->
+          unless modules[m]?
+            modules[m] = {}
+          modules[m]["#{site.host}:#{site.siteroot}"] = v
+      console.log modules
+      modules
+    knownModuleCount: -> _.size @
+    knownModule: ->
+      _.map @, (v, k) ->
+        module: k
+        versionCount: _.size _.countBy(v)
+        siteCount: _.size(v)
 

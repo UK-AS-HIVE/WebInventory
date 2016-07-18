@@ -22,5 +22,27 @@
         </tbody>
       </table>
     </div>
+
+    {{#with knownModulePivot}}
+      <div>
+        Known modules: {{knownModuleCount}}
+        <table>
+          <thead>
+            <th>Module</th>
+            <th>Installed versions #</th>
+            <th>Installed sites #</th>
+          </thead>
+          <tbody>
+            {{#each knownModule}}
+            <tr>
+              <td>{{module}}</td>
+              <td>{{versionCount}}</td>
+              <td>{{siteCount}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    {{/with}}
 </template>
 
