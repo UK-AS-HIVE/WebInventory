@@ -15,7 +15,7 @@
           {{#each drupalSites}}
           <tr>
             <td>{{host}}</td>
-            <td>{{siteroot}}</td>
+            <td><a href="/drupal/site/{{_id}}">{{siteroot}}</a></td>
             <td>{{moduleCount}}</td>
           </tr>
           {{/each}}
@@ -35,7 +35,7 @@
           <tbody>
             {{#each knownModule}}
             <tr>
-              <td>{{module}}</td>
+              <td><a href="/drupal/module/{{module}}">{{module}}</a></td>
               <td>{{versionCount}}</td>
               <td>{{siteCount}}</td>
             </tr>
@@ -46,3 +46,52 @@
     {{/with}}
 </template>
 
+<template name="drupalSiteDetail">
+  <a href="/">home</a>
+  <h2>site details</h2>
+  {{#with site}}
+    <p>{{host}}:{{siteroot}}</p>
+
+    <p>{{moduleCount}} active modules</p>
+
+    <table>
+      <thead>
+        <th>Module</th>
+        <th>Installed version</th>
+      </thead>
+      <tbody>
+        {{#each moduleVersions}}
+        <tr>
+          <td><a href="/drupal/module/{{name}}">{{name}}</a></td>
+          <td>{{version}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  {{/with}}
+</template>
+
+<template name="drupalModuleDetail">
+  <a href="/">home</a>
+  <h2>module: {{moduleName}} </h2>
+
+  <p>installed on {{siteCount}} known sites</p>
+
+  <table>
+    <thead>
+      <th>Host</th>
+      <th>Site root</th>
+      <th>{{moduleName}} version</th>
+    </thead>
+    <tbody>
+      {{#each sites}}
+      <tr>
+        <td>{{host}}</td>
+        <td><a href="/drupal/site/{{_id}}">{{siteroot}}</a></td>
+        <td>{{version}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
