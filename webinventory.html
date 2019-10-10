@@ -5,11 +5,11 @@
 <template name="home">
     <div>
       Known sites: {{knownSiteCount}}
-      <table>
+      <table rules="groups">
         <thead>
-          <th>Host</th>
-          <th>Site root</th>
-          <th>Enabled modules #</th>
+          <th class="col2">Host</th>
+          <th class="col4">Site root</th>
+          <th class="col6">Enabled modules #</th>
         </thead>
         <tbody>
           {{#each drupalSites}}
@@ -26,7 +26,7 @@
     {{#with knownModulePivot}}
       <div>
         Known modules: {{knownModuleCount}}
-        <table>
+        <table rules="groups">
           <thead>
             <th>Module</th>
             <th>Installed versions #</th>
@@ -54,7 +54,7 @@
 
     <p>{{moduleCount}} active modules</p>
 
-    <table>
+    <table rules="groups">
       <thead>
         <th>Module</th>
         <th>Installed version</th>
@@ -78,7 +78,7 @@
 
   <p>installed on {{siteCount}} known sites</p>
 
-  <table>
+  <table rules="groups">
     <thead>
       <th>Host</th>
       <th>Site root</th>

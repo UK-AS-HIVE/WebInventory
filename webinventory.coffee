@@ -1,8 +1,9 @@
 DrupalSites = new Mongo.Collection 'drupalSites'
 ###
-DrupalModules.attachSchema new SimpleSchema
+DrupalSites.attachSchema new SimpleSchema
   host: type: String
   siteroot: type: String
+  lastUpdated: type: new Date()
   moduleVersions:
     type: Object
     blackbox: true
@@ -17,6 +18,7 @@ Router.route '/drupal/site/:siteId', ->
 Router.route '/drupal/module/:moduleName', ->
   @render 'drupalModuleDetail', data: @params
 
+
 ###
 # Can post output of:
 drush eval "print_r(json_encode(array_map(function(\$m) { return system_get_info('module', \$m)['version']; }, array_filter(module_list(), function(\$m) { return module_exists(\$m); }))));"`
@@ -26,6 +28,7 @@ Router.route '/api/drupalSiteInfo', {where: 'server'}
     d = @request.body
     DrupalSites.upsert {host: d.host, siteroot: d.siteroot},
       $set:
+        lastUpdated: new Date()
         moduleVersions: d.moduleVersions
     @response.end 'Okay Thanks!'
 

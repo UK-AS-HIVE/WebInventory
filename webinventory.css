@@ -1,0 +1,85 @@
+body {
+  font-family: Avenir;
+}
+
+.grid1 > * {
+  width: 8.3333%;
+}
+
+.grid2 > * {
+  width: 16.666%;
+}
+
+.grid3 > * {
+  width: 25%;
+}
+
+.grid4 > * {
+  width: 33.3%;
+}
+
+.grid5 > * {
+  width: 41.6666%;
+}
+
+.grid6 > * {
+  width: 50%;
+}
+
+.col1 {
+  width: 8.3333%;
+}
+
+.col2 {
+  width: 16.666%;
+}
+
+.col3 {
+  width: 25%;
+}
+
+.col4 {
+  width: 33.3%;
+}
+
+.col5 {
+  width: 41.6666%;
+}
+
+.col6 {
+  width: 50%;
+}
+
+table {
+  width: 100%;
+  border-top: 2px solid black;
+  border-bottom: 1px solid black;
+  margin-bottom: 2em;
+  border-collapse: separate;
+}
+
+thead {
+  min-height: 5px;
+  border-bottom: 1px solid black;
+  text-align: left;
+}
+
+th {
+  border-bottom: 1px solid black;
+}
+
+tbody {
+  min-height: 5px;
+  border-bottom: 1px;
+}
+
+tr > td {
+  border-top: 1px dashed transparent;
+  border-bottom: 1px dashed transparent;
+}
+
+tr:hover > td {
+  border-top: 1px dashed lightgray;
+  border-bottom: 1px dashed lightgray;
+}
+
