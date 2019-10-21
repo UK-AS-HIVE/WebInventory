@@ -40,6 +40,7 @@ if Meteor.isClient
       DrupalSites.find()
     moduleCount: ->
       _.size @moduleVersions
+    datestamp: (d) -> d?.toLocaleDateString()
     knownModulePivot: ->
       modules = {}
       DrupalSites.find().forEach (site) ->

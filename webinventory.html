@@ -9,7 +9,8 @@
         <thead>
           <th class="col2">Host</th>
           <th class="col4">Site root</th>
-          <th class="col6">Enabled modules #</th>
+          <th class="col3">Enabled modules #</th>
+          <th class="col3">Last updated</th>
         </thead>
         <tbody>
           {{#each drupalSites}}
@@ -17,6 +18,7 @@
             <td>{{host}}</td>
             <td><a href="/drupal/site/{{_id}}">{{siteroot}}</a></td>
             <td>{{moduleCount}}</td>
+            <td>{{datestamp lastUpdated}}</td>
           </tr>
           {{/each}}
         </tbody>
