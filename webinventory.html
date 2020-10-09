@@ -9,15 +9,15 @@
         <thead>
           <th class="col2">Host</th>
           <th class="col4">Site root</th>
-          <th class="col3">Enabled modules #</th>
+          <th class="col3">Type</th>
           <th class="col3">Last updated</th>
         </thead>
         <tbody>
           {{#each drupalSites}}
           <tr>
             <td>{{host}}</td>
-            <td><a href="/drupal/site/{{_id}}">{{siteroot}}</a></td>
-            <td>{{moduleCount}}</td>
+            <td><a href="/site/{{_id}}">{{siteroot}}</a></td>
+            <td>{{type}}</td>
             <td>{{datestamp lastUpdated}}</td>
           </tr>
           {{/each}}
@@ -48,28 +48,47 @@
     {{/with}}
 </template>
 
-<template name="drupalSiteDetail">
+<template name="siteDetail">
   <a href="/">home</a>
   <h2>site details</h2>
   {{#with site}}
-    <p>{{host}}:{{siteroot}}</p>
+    <p>{{host}}:{{siteroot}} ({{type}})</p>
 
-    <p>{{moduleCount}} active modules</p>
+    {{#if drupalModuleVersions}}
+      <p>{{moduleCount}} active modules</p>
+      <table rules="groups">
+        <thead>
+          <th>Module</th>
+          <th>Installed version</th>
+        </thead>
+        <tbody>
+          {{#each moduleVersions}}
+          <tr>
+            <td><a href="/drupal/module/{{name}}">{{name}}</a></td>
+            <td>{{version}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{/if}}
 
-    <table rules="groups">
-      <thead>
-        <th>Module</th>
-        <th>Installed version</th>
-      </thead>
-      <tbody>
-        {{#each moduleVersions}}
-        <tr>
-          <td><a href="/drupal/module/{{name}}">{{name}}</a></td>
-          <td>{{version}}</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+    {{#if plugins}}
+      <p>{{count plugins}} active plugins</p>
+      <table rules="groups">
+        <thead>
+          <th>Plugin</th>
+          <th>Version</th>
+        </thead>
+        <tbody>
+          {{#each plugins}}
+          <tr>
+            <td><a href="https://wordpress.org/plugins/{{name}}/" rel="noreferrer" target="_blank">{{name}}</a></td>
+            <td>{{version}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{/if}}
 
   {{/with}}
 </template>

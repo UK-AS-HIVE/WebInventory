@@ -6,30 +6,64 @@ import {Router} from 'meteor/iron:router';
 
 //import './imports/autotable/autotable';
 
-const DrupalSites = new Mongo.Collection('drupalSites');
+interface SiteBase {
+  accessUrl?: string;
+  owner?: string;
+  host: string;
+  siteroot: string;
+  lastUpdated: Date;
+}
 
-/*
-DrupalSites.attachSchema new SimpleSchema
-  host: type: String
-  siteroot: type: String
-  lastUpdated: type: new Date()
-  type:
-    type: String
+interface Drupal7Site {
+  modules: {
+    name: string;
+    version: string;
+  }[];
+}
+
+interface WordPressSite {
+  plugins: {
+    name: string;
+    version: string;
+  }[];
+}
+
+type Site = SiteBase & (Drupal7Site | WordPressSite)
+const DrupalSites = new Mongo.Collection<Site>('drupalSites');
+if (Meteor.isClient) {
+  (window as any).DrupalSites = DrupalSites;
+}
+
+/*DrupalSites.attachSchema(new SimpleSchema({
+  host: {type: String},
+  siteroot: {type: String},
+  lastUpdated: {type: new Date()},
+  type: {
+    type: String,
     allowedValues: ['WordPress', 'Drupal 7']
-  moduleVersions: // Drupal only
-    type: Object
+  },
+  moduleVersions: { // Drupal only
+    type: Object,
+    optional: true,
     blackbox: true
-  plugins: // WP only
-    type: Object
+  },
+  'moduleVersions.$.name': { type: String},
+  'moduleVersions.$.version': {type: String},
+  plugins: { // WP only
+    type: Object,
+    optional: true,
     blackbox: true
- */
+  },
+  'plugins.$.name': { type: String},
+  'plugins.$.version': {type: String}
+}));*/
 
 Router.route('/', function() {
   return this.render('home');
 });
 
-Router.route('/drupal/site/:siteId', function() {
-  return this.render('drupalSiteDetail', {
+Router.route('/site/:siteId', function() {
+  return this.render('siteDetail', {
     data: this.params
   });
 });
@@ -49,8 +83,7 @@ drush eval "print_r(json_encode(array_map(function(\$m) { return system_get_info
 Router.route('/api/drupalSiteInfo', {
   where: 'server'
 }).post(function() {
-  var d;
-  d = this.request.body;
+  const d = this.request.body;
   DrupalSites.upsert({
     host: d.host,
     siteroot: d.siteroot
@@ -58,7 +91,12 @@ Router.route('/api/drupalSiteInfo', {
     $set: {
       type: 'Drupal 7',
       lastUpdated: new Date(),
-      moduleVersions: d.moduleVersions
+      moduleVersions: _.map(d.moduleVersions, (v, i) {
+        return {
+          name: i,
+          version: v
+        }
+      })
     }
   });
   return this.response.end('Okay Thanks!');
@@ -99,14 +137,15 @@ if (Meteor.isClient) {
       var modules;
       modules = {};
       DrupalSites.find().forEach(function(site) {
-        return _.each(site.moduleVersions, function(v, m) {
-          if (modules[m] == null) {
-            modules[m] = {};
-          }
-          return modules[m][site.host + ":" + site.siteroot] = v;
-        });
+        if (site.modules) {
+          return _.each(site.modules, function(v, m) {
+            if (modules[m] == null) {
+              modules[m] = {};
+            }
+            return modules[m][site.host + ":" + site.siteroot] = v;
+          });
+        }
       });
-      console.log(modules);
       return modules;
     },
     knownModuleCount: function() {
@@ -122,17 +161,21 @@ if (Meteor.isClient) {
       });
     }
   });
-  Template.drupalSiteDetail.helpers({
+  Template.siteDetail.helpers({
     site: function() {
-      return DrupalSites.findOne(this.siteId);
+      const site = DrupalSites.findOne(this.siteId);
+      return site;
     },
-    moduleVersions: function() {
+    drupalModuleVersions: function() {
       return _.map(this.moduleVersions, function(v, k) {
         return {
           name: k,
           version: v
         };
       });
+    },
+    count: function(ary : Array<any>) {
+      return ary.length;
     }
   });
   Template.drupalModuleDetail.helpers({
